@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <meta name="theme-color" content="#ff7ab0"/>
+  <title>Our 90 Days.</title>
+
+  <!-- Cute fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       RESET + BASE
+    ============================================================ */
+    *,*::before,*::after{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+    html, body{
+  height:100%;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:"Fredoka","Baloo 2",ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  color:#5c2140;
+  background:
+    radial-gradient(1200px 800px at 30% 10%, rgba(255,255,255,0.65), rgba(255,255,255,0) 60%),
+    radial-gradient(900px 700px at 80% 25%, rgba(255,255,255,0.45), rgba(255,255,255,0) 55%),
+    linear-gradient(180deg,#ffd6e9 0%,#ffc0dc 45%,#ffb0d4 100%);
+  
+  overflow:hidden;              /* ← INI NO 2 */
+  overscroll-behavior:none;
+}
+    button{ font:inherit; border:none; background:none; padding:0; }
+    a{ color:inherit; }
+    img{ max-width:100%; display:block; }
+
+    :focus-visible{
+      outline:3px solid rgba(255,105,180,0.9);
+      outline-offset:4px;
+      border-radius:14px;
+    }
+
+.app{
+  min-height: calc(var(--vh, 1vh) * 100); /* fallback */
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding: calc(14px + env(safe-area-inset-top))
+           14px
+           calc(14px + env(safe-area-inset-bottom));
+}
+
+    /* ============================================================
+       MACHINE SHELL
+       - pastel colorful but pink dominant
+       - static gloss
+       - fixed layering so lever is clickable
+    ============================================================ */
+    .machine{
+      width:min(395px, 95vw);
+      border-radius:34px;
+      position:relative;
+      padding:18px 16px 20px;
+      background:
+        radial-gradient(240px 160px at 22% 16%, rgba(255,255,255,0.78), rgba(255,255,255,0) 72%),
+        radial-gradient(220px 140px at 80% 18%, rgba(255,255,255,0.62), rgba(255,255,255,0) 72%),
+
+        radial-gradient(170px 130px at 84% 34%, rgba(199,240,255,0.32), rgba(255,255,255,0) 72%),
+        radial-gradient(170px 130px at 22% 76%, rgba(216,255,230,0.28), rgba(255,255,255,0) 72%),
+        radial-gradient(170px 130px at 78% 78%, rgba(233,217,255,0.24), rgba(255,255,255,0) 72%),
+
+        linear-gradient(180deg,#ffc5e1 0%, #ffadd4 35%, #ff9bc9 100%);
+      box-shadow:
+        inset 0 8px 16px rgba(255,255,255,0.62),
+        inset 0 -12px 20px rgba(0,0,0,0.13),
+        0 30px 55px rgba(0,0,0,0.18);
+      transform:translateZ(0);
+    }
+
+    /* static gloss */
+    .machine::after{
+      content:"";
+      position:absolute;
+      inset:10px;
+      border-radius:28px;
+      pointer-events:none;
+      background: linear-gradient(135deg,
+        rgba(255,255,255,0.34) 0%,
+        rgba(255,255,255,0.14) 30%,
+        rgba(255,255,255,0.0) 60%
+      );
+      opacity:0.9;
+      z-index:0;
+    }
+
+    /* bevel */
+    .machine::before{
+      content:"";
+      position:absolute;
+      inset:10px;
+      border-radius:28px;
+      pointer-events:none;
+      box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.72),
+        inset 0 -2px 0 rgba(0,0,0,0.08);
+      opacity:0.95;
+      z-index:0;
+    }
+
+    .machine.winGlow{
+      box-shadow:
+        inset 0 8px 16px rgba(255,255,255,0.62),
+        inset 0 -12px 20px rgba(0,0,0,0.13),
+        0 0 44px rgba(255,105,180,0.55),
+        0 30px 55px rgba(0,0,0,0.18);
+    }
+
+    /* ============================================================
+       STAR FIELD (many stars)
+    ============================================================ */
+    .starField{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+    }
+    .starMini{
+      position:absolute;
+      width:14px;
+      height:14px;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      opacity:0.95;
+      filter:saturate(1.15);
+      box-shadow:0 4px 6px rgba(0,0,0,0.18), inset 0 2px 2px rgba(255,255,255,0.7);
+      transform: rotate(var(--r));
+      animation: twinkle calc(3.2s + var(--t)) ease-in-out infinite;
+    }
+    @keyframes twinkle{
+      0%,100%{ transform:translateY(0) rotate(var(--r)); opacity:0.82; }
+      50%{ transform:translateY(-5px) rotate(var(--r)); opacity:1; }
+    }
+
+    /* sticker stars (4 big) */
+    .star{
+      position:absolute;
+      width:22px;
+      height:22px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95), rgba(255,255,255,0) 40%),
+        radial-gradient(circle at 60% 60%, #fff3a9, #ffd64d);
+      clip-path: polygon(
+        50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%,
+        50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+      );
+      box-shadow:
+        0 6px 8px rgba(0,0,0,0.22),
+        inset 0 2px 2px rgba(255,255,255,0.75);
+      opacity:0.95;
+      filter:saturate(1.08);
+      pointer-events:none;
+      z-index:2;
+    }
+    .star.s1{ top:-8px; left:22px; transform:rotate(-12deg); }
+    .star.s2{ top:42px; right:-8px; transform:rotate(18deg); }
+    .star.s3{ bottom:172px; left:-10px; transform:rotate(8deg); }
+    .star.s4{ bottom:-10px; right:46px; transform:rotate(-15deg); }
+
+    @keyframes floatStarA{ 0%,100%{ transform:translateY(0) rotate(-12deg);} 50%{ transform:translateY(-6px) rotate(-12deg);} }
+    @keyframes floatStarB{ 0%,100%{ transform:translateY(0) rotate(18deg);}  50%{ transform:translateY(-5px) rotate(18deg);} }
+    @keyframes floatStarC{ 0%,100%{ transform:translateY(0) rotate(8deg);}   50%{ transform:translateY(-6px) rotate(8deg);} }
+    @keyframes floatStarD{ 0%,100%{ transform:translateY(0) rotate(-15deg);} 50%{ transform:translateY(-5px) rotate(-15deg);} }
+    .star.s1{ animation: floatStarA 4.2s ease-in-out infinite; }
+    .star.s2{ animation: floatStarB 3.8s ease-in-out infinite; }
+    .star.s3{ animation: floatStarC 4.4s ease-in-out infinite; }
+    .star.s4{ animation: floatStarD 4.1s ease-in-out infinite; }
+
+    /* rivets */
+    .decorRivet{
+      position:absolute;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0) 45%),
+        radial-gradient(circle at 60% 60%, #ff8aba, #ff4f98);
+      box-shadow:0 4px 6px rgba(0,0,0,0.18);
+      opacity:0.9;
+      pointer-events:none;
+      z-index:2;
+    }
+    .decorRivet.r1{ top:12px; left:12px; }
+    .decorRivet.r2{ top:12px; right:12px; }
+    .decorRivet.r3{ bottom:12px; left:12px; }
+    .decorRivet.r4{ bottom:12px; right:12px; }
+
+    /* ============================================================
+       HEADER (no heart emoji)
+    ============================================================ */
+    .header{
+      text-align:center;
+      border-radius:18px;
+      padding:12px 10px;
+      font-family:"Baloo 2","Fredoka",sans-serif;
+      font-weight:900;
+      letter-spacing:1px;
+      font-size:21px;
+      color:#6a1f45;
+      background:
+        radial-gradient(140px 70px at 30% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0) 65%),
+        linear-gradient(180deg, #ffe4f1, #ffbfdc);
+      box-shadow:
+        inset 0 3px 7px rgba(255,255,255,0.85),
+        inset 0 -6px 10px rgba(0,0,0,0.12);
+      position:relative;
+      z-index:5;
+    }
+
+    /* ============================================================
+       WINDOW (reels panel)
+    ============================================================ */
+    .window{
+      margin-top:16px;
+      border-radius:22px;
+      padding:14px;
+      background:
+        radial-gradient(160px 90px at 25% 20%, rgba(255,255,255,0.75), rgba(255,255,255,0) 70%),
+        linear-gradient(180deg, #eef9ff, #d9f1ff);
+      box-shadow:
+        inset 0 4px 10px rgba(255,255,255,0.95),
+        inset 0 -8px 14px rgba(0,0,0,0.14);
+      position:relative;
+      z-index:5;
+    }
+    .window::before{
+      content:"";
+      position:absolute;
+      inset:8px;
+      border-radius:18px;
+      pointer-events:none;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 rgba(0,0,0,0.08);
+      opacity:0.9;
+    }
+
+    .reels{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+
+    .reel{
+      position:relative;
+      height:124px;
+      border-radius:16px;
+      overflow:hidden;
+      background:
+        radial-gradient(120px 70px at 30% 15%, rgba(255,255,255,0.9), rgba(255,255,255,0) 65%),
+        linear-gradient(180deg, #ffffff, #ffeaf4);
+      box-shadow:
+        inset 0 2px 6px rgba(255,255,255,0.95),
+        inset 0 -6px 10px rgba(0,0,0,0.1);
+      transform:translateZ(0);
+    }
+    .reel::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:16px;
+      pointer-events:none;
+      border:2px solid rgba(255,255,255,0.65);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.85),
+        inset 0 -1px 0 rgba(0,0,0,0.05);
+      opacity:0.9;
+    }
+    .reel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:16px;
+      pointer-events:none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0) 45%);
+      opacity:0.55;
+    }
+
+    .strip{
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      will-change:transform;
+    }
+
+    .reel.isSpinning .svgTile{
+      filter: blur(2px);
+    }
+
+    .svgTile{
+      width:100%;
+      height:124px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px;
+    }
+    .svgTile svg{
+      width:100%;
+      height:100%;
+    }
+
+    /* ============================================================
+       CONTROLS + LEVER
+    ============================================================ */
+    .controls{
+      margin-top:16px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      position:relative;
+      z-index:5;
+    }
+
+.controls{
+  margin-top:16px;
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+}
+
+.decorControls{
+  flex:1;
+  min-height:140px;
+  border-radius:18px;
+  padding:14px 14px;
+  background:
+    radial-gradient(180px 90px at 30% 20%, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%),
+    linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08));
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.55),
+    inset 0 -2px 0 rgba(0,0,0,0.05);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  position:relative;
+}
+
+.decorBtn{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  box-shadow:
+    inset 0 4px 6px rgba(255,255,255,0.75),
+    inset 0 -6px 10px rgba(0,0,0,0.14),
+    0 10px 18px rgba(0,0,0,0.14);
+  transform: translateZ(0);
+  opacity:0.95;
+}
+
+/* pastel non-pink */
+.decorBtn.b1{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.9), rgba(255,255,255,0) 38%),
+    linear-gradient(180deg,#c9f6e2,#7fe7c2); /* mint */
+}
+.decorBtn.b2{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.9), rgba(255,255,255,0) 38%),
+    linear-gradient(180deg,#d8f3ff,#9fdcff); /* baby blue */
+}
+.decorBtn.b3{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.9), rgba(255,255,255,0) 38%),
+    linear-gradient(180deg,#efe2ff,#cbb2ff); /* lavender */
+}
+
+.decorSlider{
+  flex:1;
+  height:18px;
+  border-radius:999px;
+  background:
+    radial-gradient(120px 30px at 30% 30%, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%),
+    linear-gradient(180deg,#fff6c9,#ffe48a); /* lemon pastel */
+  box-shadow:
+    inset 0 3px 6px rgba(0,0,0,0.12),
+    0 10px 18px rgba(0,0,0,0.10);
+  position:relative;
+  overflow:hidden;
+}
+
+.decorSlider .knob{
+  position:absolute;
+  top:50%;
+  left:62%;
+  transform:translate(-50%,-50%);
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95), rgba(255,255,255,0) 35%),
+    linear-gradient(180deg,#ffffff,#eaeaea);
+  box-shadow:
+    inset 0 4px 6px rgba(255,255,255,0.8),
+    inset 0 -6px 10px rgba(0,0,0,0.18),
+    0 10px 16px rgba(0,0,0,0.16);
+}
+
+@keyframes softPulse { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-2px); } }
+.decorBtn{ animation: softPulse 3.8s ease-in-out infinite; }
+.decorBtn.b2{ animation-duration:4.2s; }
+.decorBtn.b3{ animation-duration:4.6s; }
+
+    .leverWrap{
+      width:56px;
+      height:140px;
+      position:relative;
+      flex:0 0 auto;
+      z-index:10;
+    }
+    .leverTrack{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      width:9px;
+      height:100%;
+      border-radius:6px;
+      background:
+        radial-gradient(8px 40px at 50% 20%, rgba(255,255,255,0.65), rgba(255,255,255,0) 65%),
+        linear-gradient(180deg, #ff83b5, #ff3b84);
+      box-shadow:
+        inset 0 2px 2px rgba(255,255,255,0.55),
+        inset 0 -4px 6px rgba(0,0,0,0.18);
+    }
+    .leverBtn{
+      position:absolute;
+      top:0;
+      left:50%;
+      transform:translate(-50%,0);
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      cursor:pointer;
+      touch-action:manipulation;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95), rgba(255,255,255,0) 35%),
+        radial-gradient(circle at 60% 60%, #ff77ad, #ff3f89);
+      box-shadow:
+        inset 0 5px 7px rgba(255,255,255,0.75),
+        inset 0 -7px 10px rgba(0,0,0,0.26),
+        0 10px 16px rgba(0,0,0,0.3);
+      transition:transform 280ms cubic-bezier(.2,.9,.3,1.2), filter 180ms ease;
+      z-index:12;
+    }
+    .leverBtn:active{
+      filter: brightness(0.98) saturate(1.02);
+      transform: translate(-50%, 2px);
+    }
+    .leverBtn[disabled]{
+      opacity:0.55;
+      cursor:not-allowed;
+    }
+
+    .msg{
+      flex:1;
+      min-height:44px;
+      font-size:14px;
+      line-height:1.25rem;
+      color:#642346;
+      opacity:1;
+      transition:opacity 220ms ease;
+    }
+
+    /* ============================================================
+       STATUS PANEL (not flat)
+    ============================================================ */
+    .statusPanel{
+      margin-top:14px;
+      border-radius:18px;
+      padding:12px;
+      background:
+        radial-gradient(220px 100px at 30% 20%, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%),
+        linear-gradient(180deg,#ffd7ea,#ffb0d4);
+      box-shadow:
+        inset 0 6px 10px rgba(255,255,255,0.75),
+        inset 0 -10px 16px rgba(0,0,0,0.12);
+      position:relative;
+      z-index:5;
+    }
+    .statusInner{
+      border-radius:14px;
+      padding:12px 12px;
+      background:
+        radial-gradient(180px 70px at 22% 15%, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%),
+        linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.18));
+      box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.8),
+        inset 0 -2px 0 rgba(0,0,0,0.05);
+    }
+    .statusTitle{
+      font-family:"Baloo 2","Fredoka",sans-serif;
+      font-weight:900;
+      letter-spacing:1px;
+      font-size:12px;
+      opacity:0.8;
+      margin-bottom:6px;
+    }
+    .statusText{
+      font-size:14px;
+      line-height:1.35rem;
+      transition:opacity 220ms ease;
+    }
+
+    /* ============================================================
+       TRAY
+    ============================================================ */
+    .tray{
+      margin-top:16px;
+      border-radius:18px;
+      padding:14px;
+      text-align:center;
+      background:
+        radial-gradient(240px 120px at 30% 18%, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%),
+        linear-gradient(180deg, #ffc7e2, #ff9bc6);
+      box-shadow:
+        inset 0 6px 10px rgba(255,255,255,0.85),
+        inset 0 -9px 14px rgba(0,0,0,0.2);
+      position:relative;
+      z-index:5;
+    }
+    .trayWell{
+      position:relative;
+      height:56px;
+      margin-bottom:6px;
+      border-radius:14px;
+      overflow:hidden;
+      background:
+        radial-gradient(160px 60px at 50% 30%, rgba(0,0,0,0.12), rgba(0,0,0,0) 65%),
+        linear-gradient(180deg, #ffd8eb, #ffbddb);
+      box-shadow: inset 0 5px 8px rgba(0,0,0,0.18);
+    }
+    .trayLabel{
+      font-family:"Baloo 2","Fredoka",sans-serif;
+      font-weight:900;
+      letter-spacing:0.6px;
+      font-size:13px;
+      color:#6a1f45;
+      opacity:0.95;
+    }
+
+    .capsule{
+      position:absolute;
+      left:50%;
+      top:-78px;
+      width:38px;
+      height:38px;
+      transform: translateX(-50%);
+      border-radius:50%;
+      cursor:pointer;
+      touch-action: manipulation;
+      background: linear-gradient(90deg, #ff6fa9 0%, #ff6fa9 50%, #fff1a8 50%, #fff1a8 100%);
+      box-shadow:
+        0 8px 14px rgba(0,0,0,0.28),
+        inset 0 4px 4px rgba(255,255,255,0.75),
+        inset 0 -4px 6px rgba(0,0,0,0.15);
+    }
+    .capsule::before{
+      content:"";
+      position:absolute;
+      inset:4px 6px auto 6px;
+      height:12px;
+      border-radius:10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0));
+      opacity:0.8;
+      pointer-events:none;
+    }
+    .capsule::after{
+      content:"";
+      position:absolute;
+      top:50%;
+      left:0;
+      right:0;
+      height:2px;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.08);
+      opacity:0.6;
+      pointer-events:none;
+    }
+    .capsule.locked{
+      cursor: default;
+      opacity: 0.95;
+    }
+
+    /* ============================================================
+       MODAL
+    ============================================================ */
+    .modal{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,0.58);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:999;
+    }
+    .modal.active{ display:flex; }
+    .sheet{
+      width:min(520px,96vw);
+      max-height:min(82vh,760px);
+      overflow:auto;
+      border-radius:22px;
+      padding:18px 18px 16px;
+      color:#4f1736;
+      background:
+        radial-gradient(260px 120px at 30% 10%, rgba(255,255,255,0.9), rgba(255,255,255,0) 65%),
+        linear-gradient(180deg, #fff7fb, #fff0f7);
+      box-shadow:0 30px 60px rgba(0,0,0,0.35);
+      transform-origin:center;
+      animation: modalPop 220ms ease;
+    }
+    @keyframes modalPop{
+      from{ transform: scale(0.96); opacity:0; }
+      to{ transform: scale(1); opacity:1; }
+    }
+    .sheet h2{
+      font-family:"Baloo 2","Fredoka",sans-serif;
+      margin:4px 0 10px;
+      font-size:20px;
+    }
+    .sheet p{
+      margin:10px 0;
+      line-height:1.5rem;
+      font-size:14.6px;
+      color:#5a1b3d;
+    }
+    .sheet img{
+      width:100%;
+      border-radius:16px;
+      margin:12px 0 10px;
+      box-shadow:0 10px 20px rgba(0,0,0,0.12);
+    }
+    .modalActions{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      text-decoration:none;
+      user-select:none;
+      -webkit-user-select:none;
+      touch-action: manipulation;
+      font-family:"Baloo 2","Fredoka",sans-serif;
+    }
+    .btnPrimary{
+      flex:1;
+      background: linear-gradient(180deg, #6fe1a7, #3ccf89);
+      color:#fff;
+      box-shadow:
+        inset 0 2px 2px rgba(255,255,255,0.55),
+        0 10px 18px rgba(0,0,0,0.18);
+    }
+    .btnSecondary{
+      flex:0 0 auto;
+      background: rgba(0,0,0,0.06);
+      color:#5a1b3d;
+    }
+    .btnPrimary:active,.btnSecondary:active{ transform:translateY(1px); }
+
+    .srOnly{
+      position:absolute !important;
+      width:1px !important;
+      height:1px !important;
+      padding:0 !important;
+      margin:-1px !important;
+      overflow:hidden !important;
+      clip:rect(0,0,0,0) !important;
+      white-space:nowrap !important;
+      border:0 !important;
+    }
+
+    @media (max-width:360px){
+      .reel{ height:108px; }
+      .svgTile{ height:108px; }
+      .strip img{ padding:9px; }
+      .leverWrap{ width:54px; height:138px; }
+      .leverBtn{ width:42px; height:42px; }
+      .header{ font-size:20px; }
+      .statusText{ font-size:13.8px; }
+    }
+    @media (min-width:420px){
+      .header{ font-size:22px; }
+      .msg{ font-size:14.5px; }
+      .reel{ height:128px; }
+      .svgTile{ height:128px; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .star.s1,.star.s2,.star.s3,.star.s4,.starMini{ animation:none !important; }
+      .sheet{ animation:none !important; }
+      .leverBtn{ transition:none !important; }
+      .msg,.statusText{ transition:none !important; }
+    }
+  
+  /* ============================================================
+   LETTER PAPER (PURE CSS – NO IMAGE)
+============================================================ */
+
+.paper{
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow: 0 18px 30px rgba(0,0,0,0.18);
+}
+
+.paperContent{
+  padding:22px 20px 26px;
+  font-family:"Baloo 2","Fredoka",sans-serif;
+  color:#5a1b3d;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0) 0px,
+      rgba(255,255,255,0) 22px,
+      rgba(0,0,0,0.06) 23px
+    );
+}
+
+.paperContent h2{
+  margin:0 0 10px;
+  text-align:center;
+  font-size:20px;
+}
+
+.paperContent p{
+  margin:0 0 14px;
+  line-height:1.55rem;
+  font-size:14.6px;
+}
+
+.paperTop,
+.paperBottom{
+  height:26px;
+  background-size:32px 26px;
+  background-repeat:repeat-x;
+}
+
+.paperTop{ transform:rotate(180deg); }
+.paperBottom{ margin-top:-1px; }
+
+/* YELLOW */
+.paper-yellow{ background:#fff9df; }
+.paper-yellow .paperContent{ background-color:#fff9df; }
+.paper-yellow .paperTop,
+.paper-yellow .paperBottom{
+  background-image:
+    radial-gradient(circle at 16px -6px, #fff9df 18px, transparent 19px),
+    radial-gradient(circle at 0px -6px, #fff3c1 18px, transparent 19px);
+}
+
+/* BLUE */
+.paper-blue{ background:#eef8ff; }
+.paper-blue .paperContent{ background-color:#eef8ff; }
+.paper-blue .paperTop,
+.paper-blue .paperBottom{
+  background-image:
+    radial-gradient(circle at 16px -6px, #eef8ff 18px, transparent 19px),
+    radial-gradient(circle at 0px -6px, #dbefff 18px, transparent 19px);
+}
+
+/* PINK */
+.paper-pink{ background:#fff0f6; }
+.paper-pink .paperContent{ background-color:#fff0f6; }
+.paper-pink .paperTop,
+.paper-pink .paperBottom{
+  background-image:
+    radial-gradient(circle at 16px -6px, #fff0f6 18px, transparent 19px),
+    radial-gradient(circle at 0px -6px, #ffd6e9 18px, transparent 19px);
+}
+
+.machine{
+  transform-origin: top center;
+}
+
+/* iPhone Safari / layar pendek */
+@media (max-height: 750px){
+  .machine{
+    transform: scale(0.94);
+  }
+}
+
+@media (max-height: 700px){
+  .machine{
+    transform: scale(0.90);
+  }
+}
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="machine" id="machine" aria-label="Love Slot Machine">
+
+      <div class="starField" aria-hidden="true"></div>
+
+      <span class="star s1" aria-hidden="true"></span>
+      <span class="star s2" aria-hidden="true"></span>
+      <span class="star s3" aria-hidden="true"></span>
+      <span class="star s4" aria-hidden="true"></span>
+
+      <span class="decorRivet r1" aria-hidden="true"></span>
+      <span class="decorRivet r2" aria-hidden="true"></span>
+      <span class="decorRivet r3" aria-hidden="true"></span>
+      <span class="decorRivet r4" aria-hidden="true"></span>
+
+      <header class="header">Our 90 Days.</header>
+
+      <section class="window" aria-label="Reels window">
+        <div class="reels" role="group" aria-label="Slot reels">
+          <div class="reel" aria-label="Reel 1"><div class="strip" data-reel="0"></div></div>
+          <div class="reel" aria-label="Reel 2"><div class="strip" data-reel="1"></div></div>
+          <div class="reel" aria-label="Reel 3"><div class="strip" data-reel="2"></div></div>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="Controls">
+  <div class="leverWrap">
+    <div class="leverTrack" aria-hidden="true"></div>
+    <button class="leverBtn" id="leverBtn" type="button" aria-label="Pull the lever to spin"></button>
+  </div>
+
+  <!-- A) NEW: decorative buttons cluster (near lever) -->
+  <div class="decorControls" aria-hidden="true">
+    <div class="decorBtn b1"></div>
+    <div class="decorBtn b2"></div>
+    <div class="decorBtn b3"></div>
+    <div class="decorSlider">
+      <span class="knob"></span>
+    </div>
+  </div>
+
+  <!-- message tetap ada tapi disembunyiin (buat screenreader) -->
+  <div class="srOnly" id="msg" aria-live="polite">Pull the lever to spin.</div>
+</section>
+
+      <section class="statusPanel" aria-label="Status panel">
+        <div class="statusInner">
+          <div class="statusTitle">MESSAGE</div>
+          <div class="statusText" id="statusText">Pull the lever to spin.</div>
+        </div>
+      </section>
+
+      <section class="tray" aria-label="Prize tray">
+        <div class="trayWell" id="trayWell" aria-label="Tray compartment"></div>
+        <div class="trayLabel">GOOD LUCK</div>
+      </section>
+
+      <div class="srOnly" id="srAnnounce" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="Gift letter">
+      <div id="modalBody"></div>
+      <div class="modalActions">
+        <a class="btn btnPrimary" id="spotifyBtn" href="#" target="_blank" rel="noopener" style="display:none;">Open Our Playlist</a>
+        <button class="btn btnSecondary" id="closeModal" type="button" aria-label="Close letter">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+/* ======================================================================
+   LOVE SLOT MACHINE — JS (SVG symbols, realistic spin)
+====================================================================== */
+
+const SYMBOLS = [
+
+/* ============================================================
+   STRAWBERRY — KAWAII, CHUBBY, GLOSSY
+============================================================ */
+{
+  key: "strawberry",
+  label: "Strawberry",
+  svg: `
+  <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="sbGlow" cx="30%" cy="25%" r="70%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+        <stop offset="45%" stop-color="#ffb6d6" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#ff5fa2" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="sbBody" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ff7fb6"/>
+        <stop offset="100%" stop-color="#ff3f89"/>
+      </linearGradient>
+    </defs>
+
+    <!-- leaf -->
+    <path d="M64 18c-8 0-16 4-22 10 6-2 12-2 18 0-4-6 2-10 4-10s8 4 4 10c6-2 12-2 18 0-6-6-14-10-22-10Z"
+          fill="#4fd28a"/>
+
+    <!-- body -->
+    <path d="M32 52
+             C32 34 48 28 64 28
+             C80 28 96 34 96 52
+             C96 92 78 110 64 110
+             C50 110 32 92 32 52Z"
+          fill="url(#sbBody)"/>
+
+    <!-- seeds -->
+    <g fill="#ffd8a8">
+      <circle cx="52" cy="64" r="3"/>
+      <circle cx="74" cy="66" r="3"/>
+      <circle cx="60" cy="78" r="3"/>
+      <circle cx="78" cy="86" r="3"/>
+      <circle cx="48" cy="86" r="3"/>
+    </g>
+
+    <!-- face blush -->
+    <circle cx="50" cy="74" r="4" fill="#ff9fc7" opacity="0.6"/>
+    <circle cx="78" cy="74" r="4" fill="#ff9fc7" opacity="0.6"/>
+
+    <!-- gloss -->
+    <ellipse cx="52" cy="48" rx="14" ry="10" fill="#fff" opacity="0.55"/>
+    <rect width="128" height="128" fill="url(#sbGlow)"/>
+  </svg>
+  `
+},
+
+/* ============================================================
+   HEART — PUFFY / MARSHMALLOW STYLE
+============================================================ */
+{
+  key: "heart",
+  label: "Heart",
+  svg: `
+  <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="htBody" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ff9fc7"/>
+        <stop offset="100%" stop-color="#ff4f93"/>
+      </linearGradient>
+      <radialGradient id="htGlow" cx="30%" cy="25%" r="70%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+        <stop offset="45%" stop-color="#ffc2dc" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#ff5fa2" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- heart body -->
+    <path d="M64 108
+             C64 108 20 78 20 48
+             C20 30 34 22 46 22
+             C56 22 62 28 64 32
+             C66 28 72 22 82 22
+             C94 22 108 30 108 48
+             C108 78 64 108 64 108Z"
+          fill="url(#htBody)"/>
+
+    <!-- inner shine -->
+    <path d="M46 42
+             C52 36 62 38 66 44"
+          stroke="#ffffff"
+          stroke-width="8"
+          stroke-linecap="round"
+          opacity="0.4"/>
+
+    <rect width="128" height="128" fill="url(#htGlow)"/>
+  </svg>
+  `
+},
+
+/* ============================================================
+   STAR — PINK, CUTE, REPLACEMENT FOR SHELL
+============================================================ */
+{
+  key: "star",
+  label: "Star",
+  svg: `
+  <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="stBody" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffb6dc"/>
+        <stop offset="100%" stop-color="#ff6fb1"/>
+      </linearGradient>
+      <radialGradient id="stGlow" cx="35%" cy="25%" r="70%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+        <stop offset="45%" stop-color="#ffd1ea" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#ff7ab8" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- star shape -->
+    <polygon points="
+      64,14
+      78,48
+      114,48
+      84,70
+      96,108
+      64,86
+      32,108
+      44,70
+      14,48
+      50,48"
+      fill="url(#stBody)"
+      stroke="#ff8fc6"
+      stroke-width="4"
+      stroke-linejoin="round"/>
+
+    <!-- sparkle -->
+    <circle cx="52" cy="54" r="5" fill="#fff" opacity="0.6"/>
+    <circle cx="78" cy="70" r="3" fill="#fff" opacity="0.4"/>
+
+    <rect width="128" height="128" fill="url(#stGlow)"/>
+  </svg>
+  `
+}
+
+];
+
+/* DOM */
+const machineEl   = document.getElementById("machine");
+const leverBtn    = document.getElementById("leverBtn");
+const msgEl       = document.getElementById("msg");
+const statusText  = document.getElementById("statusText");
+const trayWell    = document.getElementById("trayWell");
+const modalEl     = document.getElementById("modal");
+const modalBodyEl = document.getElementById("modalBody");
+const closeModal  = document.getElementById("closeModal");
+const spotifyBtn  = document.getElementById("spotifyBtn");
+const srAnnounce  = document.getElementById("srAnnounce");
+const starField   = document.querySelector(".starField");
+const reelBoxes   = Array.from(document.querySelectorAll(".reel"));
+const strips      = Array.from(document.querySelectorAll(".strip"));
+
+/* Audio */
+const bgm = new Audio("everythinguare.mp3");
+bgm.loop = true;
+bgm.volume = 0;
+
+let musicStarted = false;
+let firstInteractionSeen = false;
+
+/* State */
+let isSpinning = false;
+let spinCount  = 0;
+let lastOutcome = null;
+let capsuleEl = null;
+let capsuleClickable = false;
+
+/* Helpers */
+function sleep(ms){ return new Promise(res => setTimeout(res, ms)); }
+function randomFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function setMessage(text){
+  msgEl.style.opacity = 0;
+  if (statusText) statusText.style.opacity = 0;
+
+  setTimeout(() => {
+    msgEl.textContent = text;
+    msgEl.style.opacity = 1;
+    if (statusText){
+      statusText.textContent = text;
+      statusText.style.opacity = 1;
+    }
+  }, 120);
+
+  srAnnounce.textContent = text;
+}
+
+function fadeInAudio(audio, target=1, durationMs=1500){
+  const steps = 30;
+  const stepTime = Math.max(30, Math.floor(durationMs / steps));
+  const delta = (target - audio.volume) / steps;
+  let i = 0;
+  const t = setInterval(() => {
+    i++;
+    audio.volume = Math.min(target, Math.max(0, audio.volume + delta));
+    if (i >= steps) clearInterval(t);
+  }, stepTime);
+}
+
+async function tryStartMusic(){
+  if (musicStarted) return;
+  try{
+    await bgm.play();
+    musicStarted = true;
+    fadeInAudio(bgm, 1, 1500);
+  }catch(e){
+    musicStarted = false; // retry next user interaction
+  }
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && musicStarted && bgm.paused) {
+    bgm.play().catch(() => {});
+  }
+});
+
+/* Stars generator */
+(function makeStars(){
+  if(!starField) return;
+  const colors = [
+    ["#fff6a8","#ffd45a"],
+    ["#dff6ff","#9fe0ff"],
+    ["#e9d9ff","#caa8ff"],
+    ["#ffd9ef","#ff9fcb"],
+    ["#dfffe8","#9ff5c3"]
+  ];
+  const count = 26;
+  for(let i=0;i<count;i++){
+    const s = document.createElement("span");
+    s.className = "starMini";
+    const c = colors[Math.floor(Math.random()*colors.length)];
+    s.style.background =
+      `radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95), rgba(255,255,255,0) 40%),
+       radial-gradient(circle at 60% 60%, ${c[0]}, ${c[1]})`;
+    s.style.left = `${Math.random()*96+2}%`;
+    s.style.top  = `${Math.random()*96+2}%`;
+    s.style.setProperty("--r", (Math.random()*40 - 20).toFixed(1) + "deg");
+    s.style.setProperty("--t", (Math.random()*2).toFixed(2) + "s");
+    const size = 10 + Math.random()*10;
+    s.style.width = size + "px";
+    s.style.height = size + "px";
+    s.style.opacity = (0.72 + Math.random()*0.28).toFixed(2);
+    starField.appendChild(s);
+  }
+})();
+
+/* Messages */
+const IDLE_HINT = "Hey, kakak. Wanna try to push your luck? :b";
+const SPINNING_TEXT = "spinning…";
+const LOSE_LINES = [
+  "Yah, coba lagi, kak :b",
+  "Sedikit lagi, cantik. Tungguin ya?",
+];
+
+/* Reels */
+const STRIP_REPEAT = 18;
+
+function buildStrip(stripEl){
+  stripEl.innerHTML = "";
+  for (let i=0;i<STRIP_REPEAT;i++){
+    const sym = SYMBOLS[i % SYMBOLS.length];
+    const wrap = document.createElement("div");
+    wrap.className = "svgTile";
+    wrap.setAttribute("aria-label", sym.label);
+    wrap.innerHTML = sym.svg;
+    stripEl.appendChild(wrap);
+  }
+}
+
+function initReels(){
+  strips.forEach(buildStrip);
+}
+initReels();
+
+function setReelsSpinningState(on){
+  reelBoxes.forEach(rb => rb.classList.toggle("isSpinning", on));
+}
+
+function resetCapsule(){
+  trayWell.innerHTML = "";
+  capsuleEl = null;
+  capsuleClickable = false;
+}
+
+function lockLever(disabled){
+  leverBtn.disabled = !!disabled;
+  if (disabled) leverBtn.setAttribute("disabled","true");
+  else leverBtn.removeAttribute("disabled");
+}
+
+/* Probability rules EXACT */
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function getOutcomeByRules(){
+  spinCount += 1;
+
+  if (spinCount === 1){
+    return shuffle([SYMBOLS[0], SYMBOLS[1], SYMBOLS[2]]);
+  }
+  if (spinCount === 2){
+    const base = SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
+    const others = SYMBOLS.filter(s => s.key !== base.key);
+    const diff = others[Math.floor(Math.random()*others.length)];
+    return shuffle([base, base, diff]);
+  }
+  if (spinCount === 3) return [SYMBOLS[0], SYMBOLS[0], SYMBOLS[0]];
+  if (spinCount === 4) return [SYMBOLS[2], SYMBOLS[2], SYMBOLS[2]];
+  if (spinCount === 5) return [SYMBOLS[1], SYMBOLS[1], SYMBOLS[1]];
+
+  spinCount = 0;
+  return getOutcomeByRules();
+}
+
+function isTriple(outcome){
+  return outcome[0].key === outcome[1].key && outcome[1].key === outcome[2].key;
+}
+
+/* Realistic spin (fast -> slow -> lock + tick) */
+const REEL_STOP_DELAYS = [0, 220, 420];
+
+async function spinOneReel(reelIndex, finalSymbol){
+  const stripEl = strips[reelIndex];
+
+  buildStrip(stripEl);
+  stripEl.style.transition = "none";
+  stripEl.style.transform  = "translateY(0px)";
+  stripEl.offsetHeight;
+
+  const reelHeight = reelBoxes[reelIndex].clientHeight;
+  const distFast = (STRIP_REPEAT * reelHeight) + (reelIndex * reelHeight * 2);
+  const distSlow = distFast + (reelHeight * (2 + Math.floor(Math.random()*4)));
+
+  stripEl.style.transition = `transform 700ms linear`;
+  stripEl.style.transform  = `translateY(-${distFast}px)`;
+  await sleep(700);
+
+  stripEl.style.transition = `transform 650ms cubic-bezier(.12,.88,.22,1)`;
+  stripEl.style.transform  = `translateY(-${distSlow}px)`;
+  await sleep(650 + REEL_STOP_DELAYS[reelIndex]);
+
+  stripEl.style.transition = "none";
+  stripEl.style.transform  = "translateY(0px)";
+  stripEl.innerHTML = "";
+
+  const wrap = document.createElement("div");
+  wrap.className = "svgTile";
+  wrap.innerHTML = finalSymbol.svg;
+  stripEl.appendChild(wrap);
+
+  reelBoxes[reelIndex].animate(
+    [
+      { transform:"translateY(0px)" },
+      { transform:"translateY(1.5px)" },
+      { transform:"translateY(0px)" }
+    ],
+    { duration:150, easing:"ease-out" }
+  );
+}
+
+/* Capsule drop */
+function spawnCapsule(){
+  capsuleEl = document.createElement("div");
+  capsuleEl.className = "capsule locked";
+  capsuleEl.setAttribute("role","button");
+  capsuleEl.setAttribute("tabindex","0");
+  capsuleEl.setAttribute("aria-label","Gift capsule. Tap to open.");
+  trayWell.appendChild(capsuleEl);
+
+  capsuleClickable = false;
+
+  let y = -78;
+  let v = 0;
+  const gravity = 1.65;
+  const floor = 7;
+  let bounces = 0;
+
+  const tick = () => {
+    v += gravity;
+    y += v;
+
+    if (y >= floor){
+      y = floor;
+      v *= -0.34;
+      bounces += 1;
+
+      if (Math.abs(v) < 1 || bounces >= 5){
+        y = floor;
+        capsuleEl.style.top = y + "px";
+        capsuleClickable = true;
+        capsuleEl.classList.remove("locked");
+        return;
+      }
+    }
+
+    capsuleEl.style.top = y + "px";
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+
+  const openIfReady = () => {
+    if (!capsuleClickable) return;
+    openLetterFromLastWin();
+  };
+
+  capsuleEl.addEventListener("click", openIfReady);
+  capsuleEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " "){
+      e.preventDefault();
+      openIfReady();
+    }
+  });
+}
+
+/* Letters */
+const LETTERS = {
+  strawberry: {
+    title: "Strawberry",
+    img: "dami1.jpg",
+    paragraphs: [
+      "Let me be your shelter when the winds are cruel, Kak.",
+      "Let me be the voice that says, “You are not alone. Not now. Not ever.” I do not run from your sadness—I sit with it.",
+      "And to remind you:",
+      "Your pain doesn't scare me. Your silence doesn't push me away. Your tears only tie me closer to you. Love, to me, means staying. And I will stay.",
+      "I remember every action, every strength, and every gentle word you've ever given me, even when you had nothing left for yourself. Your pain becomes mine too. I'm not going anywhere. No matter what you're going through, I'll always be here to help you overcome it: you don't have to face anything alone anymore."
+    ],
+    spotify: null
+  },
+  star: {
+    title: "Star",
+    img: "dami2.jpg",
+    paragraphs: [
+      "When the world feels cold, I will be the gentle breath that makes your heart back to life. When you feel lost, I'll hold five pieces of my heart, each one beating only for you. I will piece them together softly, to fill the spaces where your energy faded. I want be the reason of your spark, until that numbness dissolves. Whenever you feel numb or drained. I'm right here. You don't have to carry it alone. I'll make space for your silence, your tears-whatever you need. When you're ready, I'll help you feel again, even if it's little by little. I'm not going anywhere. We'll walk through the fire together, until you can finally feel it again."
+    ],
+    spotify: null
+  },
+  heart: {
+    title: "Heart",
+    img: "dami3.jpg",
+    paragraphs: [
+      "You need not apologize for the battles you didn't choose to start. The battles of the body-so unfair—If disgust ever whispers lies that you were weak, I understand the silence you cannot speak. I'll hold your pain in prayers to Him each night, and vow to stand beside you through every fight. You are more than what you lost or could not defend-a soul so brave, a light that will never end. So when your spirit trembles and your heart feels torn apart, remember you are safe within five pieces of my heart. No need for sorry; no need to explain—I am here to heal you with my brain. Whenever you feel upset or disgusted with yourself because you feel like you couldn't protect your body from others, please don't ever feel like you need to apologize to me. I'll always understand you, and I'm here to listen without judgment. Please know that I'm doing my best to take care of your beautiful soul. I will always pray to God to give you strength, and I'll do everything I can to help you through it. Your worth isn't defined by what happened, and I love you exactly as you are. Happy 3rd Mensive, my lovely Damien."
+    ],
+    spotify: "https://music.youtube.com/playlist?list=PLDpuZLTw48KKjWZt7T8Q2fsgr8FnZt33o&si=o6Zd77X7RIr08IDo"
+  }
+};
+
+/* Modal open/close + focus trap */
+let lastFocusedElement = null;
+
+function openModal(){
+  lastFocusedElement = document.activeElement;
+  modalEl.classList.add("active");
+  modalEl.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  setTimeout(()=> closeModal.focus(), 0);
+}
+
+function closeModalNow(){
+  modalEl.classList.remove("active");
+  modalEl.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+
+  if(lastFocusedElement && typeof lastFocusedElement.focus === "function"){
+    lastFocusedElement.focus();
+  }
+
+  machineEl.classList.remove("winGlow");
+  setMessage(IDLE_HINT);
+}
+
+modalEl.addEventListener("click",(e)=>{
+  if(e.target === modalEl) closeModalNow();
+});
+
+document.addEventListener("keydown",(e)=>{
+  if(e.key === "Escape" && modalEl.classList.contains("active")){
+    closeModalNow();
+  }
+});
+
+document.addEventListener("keydown",(e)=>{
+  if(!modalEl.classList.contains("active")) return;
+  if(e.key !== "Tab") return;
+
+  const focusable = modalEl.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+  if(!focusable.length) return;
+
+  const first = focusable[0];
+  const last  = focusable[focusable.length-1];
+
+  if(e.shiftKey && document.activeElement === first){
+    e.preventDefault(); last.focus();
+  }else if(!e.shiftKey && document.activeElement === last){
+    e.preventDefault(); first.focus();
+  }
+});
+
+closeModal.addEventListener("click", closeModalNow);
+
+/* Render letter */
+function renderLetter(symbolKey){
+  const data = LETTERS[symbolKey];
+  if(!data) return;
+
+  let paperClass = "paper-pink";
+  if(symbolKey === "strawberry") paperClass = "paper-yellow";
+  if(symbolKey === "star")       paperClass = "paper-blue";
+  if(symbolKey === "heart")      paperClass = "paper-pink";
+
+  let html = `
+    <div class="paper ${paperClass}">
+      <div class="paperTop"></div>
+      <div class="paperContent">
+        <h2>${data.title}</h2>
+        ${data.paragraphs.map(p => `<p>${p}</p>`).join("")}
+        <img src="${data.img}" alt="${data.title}">
+      </div>
+      <div class="paperBottom"></div>
+    </div>
+  `;
+
+  modalBodyEl.innerHTML = html;
+
+  if(data.spotify){
+    spotifyBtn.style.display = "inline-flex";
+    spotifyBtn.href = data.spotify;
+  }else{
+    spotifyBtn.style.display = "none";
+  }
+}
+
+function openLetterFromLastWin(){
+  if(!lastOutcome) return;
+  renderLetter(lastOutcome[0].key);
+  openModal();
+}
+
+/* Main spin */
+async function spinSequence(){
+  if(isSpinning) return;
+
+  if(!firstInteractionSeen){
+    firstInteractionSeen = true;
+    await tryStartMusic();
+  }else if(!musicStarted){
+    await tryStartMusic();
+  }
+
+  isSpinning = true;
+  lockLever(true);
+  resetCapsule();
+  machineEl.classList.remove("winGlow");
+
+  setMessage(SPINNING_TEXT);
+
+  leverBtn.style.transform = "translate(-50%, 78px)";
+  await sleep(220);
+  leverBtn.style.transform = "translate(-50%, 0)";
+  await sleep(120);
+
+  const outcome = getOutcomeByRules();
+  lastOutcome = outcome;
+
+  setReelsSpinningState(true);
+
+  await Promise.all([
+    spinOneReel(0, outcome[0]),
+    spinOneReel(1, outcome[1]),
+    spinOneReel(2, outcome[2])
+  ]);
+
+  setReelsSpinningState(false);
+
+  if(!isTriple(outcome)){
+    setMessage(randomFrom(LOSE_LINES));
+    await sleep(300);
+    lockLever(false);
+    isSpinning = false;
+    return;
+  }
+
+  machineEl.classList.add("winGlow");
+  setMessage("Asik, take a look the gift, sayang.");
+  spawnCapsule();
+
+  await sleep(300);
+  lockLever(false);
+  isSpinning = false;
+}
+
+/* Input handlers */
+leverBtn.addEventListener("click", spinSequence);
+leverBtn.addEventListener("keydown",(e)=>{
+  if(e.key === "Enter" || e.key === " "){
+    e.preventDefault();
+    spinSequence();
+  }
+});
+
+/* Startup idle */
+(function initIdle(){
+  setMessage(IDLE_HINT);
+  lockLever(false);
+
+  const idleSymbols = [SYMBOLS[0], SYMBOLS[1], SYMBOLS[2]];
+  strips.forEach((strip, i)=>{
+    strip.innerHTML = "";
+    const wrap = document.createElement("div");
+    wrap.className = "svgTile";
+    wrap.innerHTML = idleSymbols[i].svg;
+    strip.appendChild(wrap);
+  });
+})();
+
+/* Prevent selection outside modal */
+document.addEventListener("selectstart",(e)=>{
+  if(modalEl.classList.contains("active")) return;
+  e.preventDefault();
+});
+
+/* iOS viewport fix: set --vh = 1% real height */
+function setVh(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVh();
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', setVh);
+  </script>
+</body>
+</html>
